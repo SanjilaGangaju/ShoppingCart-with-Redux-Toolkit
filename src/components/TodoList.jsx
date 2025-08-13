@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Checkbox, Container, List, ListItem, ListItemText, TextField } from '@mui/material'
-import { addTodo, toggleCompleted } from '../redux/todoSlice'
+import { addTodo, toggleCompleted, deleteTodo} from '../redux/todoSlice'
 import { useSelector, useDispatch } from 'react-redux'
 const TodoList = () => {
     const [input, setInput] = useState('')
@@ -9,7 +9,7 @@ const TodoList = () => {
     const handleAdd=()=>{
         if (input.trim()!==""){
             dispatch(addTodo(input))
-            StepContext('')
+        
         }
     }
   return (
@@ -24,6 +24,7 @@ const TodoList = () => {
 
                     <ListItemText primary={todo.text} sx={{textDecoration: todo.completed?"line-through": "none"}}>
                     </ListItemText>
+                    <Button onClick={()=>dispatch(deleteTodo(todo.id))}>Delete Todo</Button>
 
                 </ListItem>
             ))}
