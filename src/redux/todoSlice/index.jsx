@@ -33,12 +33,14 @@ export const todoSlice = createSlice({
             }
         },
         deleteTodo(state,action){
+            
           
                 return state.filter(todo=>todo.id !== action.payload);
 
         
 
     },
+  
 }
 });
 export const {addTodo, toggleCompleted, deleteTodo} = todoSlice.actions
