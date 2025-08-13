@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button, Container, List, ListItem, ListItemText, TextField } from '@mui/material'
-import { addTodo } from '../redux/todoSlice'
+import { Button, Checkbox, Container, List, ListItem, ListItemText, TextField } from '@mui/material'
+import { addTodo, toggleCompleted } from '../redux/todoSlice'
 import { useSelector, useDispatch } from 'react-redux'
 const TodoList = () => {
     const [input, setInput] = useState('')
@@ -19,8 +19,12 @@ const TodoList = () => {
         
         <List>
             {todos.map(todo=>(
-                <ListItem key={todo.id}>
-                    <ListItemText>{todo.text}</ListItemText>
+                <ListItem key={todo.id} >
+                    <Checkbox checked={todos.completed} onChange={()=>dispatch(toggleCompleted(todo.id))}></Checkbox>
+
+                    <ListItemText primary={todo.text} sx={{textDecoration: todo.completed?"line-through": "none"}}>
+                    </ListItemText>
+
                 </ListItem>
             ))}
         </List>

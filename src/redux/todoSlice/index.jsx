@@ -20,9 +20,18 @@ export const todoSlice = createSlice({
                 }
             }
           
-        }
+        },
+        toggleCompleted:{
+            reducer(state, action){
+                const todo = state.find(t=>t.id == action.payload);
+                if(todo){
+                    todo.completed = !todo.completed;
+                }
+            }
+        },
+        
 
     }
 })
-export const {addTodo} = todoSlice.actions
+export const {addTodo, toggleCompleted} = todoSlice.actions
 export default todoSlice.reducer;
