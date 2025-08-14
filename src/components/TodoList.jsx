@@ -3,8 +3,10 @@ import { AppBar, Button, ButtonGroup, Checkbox, Container, List, ListItem, ListI
 import { addTodo, toggleCompleted, deleteTodo, editTodo} from '../redux/todoSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../redux/filterSlice'
+import {motion, AnimatePresence} from "framer-motion";
 import { ToastContainer, toast, Slide } from 'react-toastify';
 const TodoList = () => {
+    const MotionButton = motion(Button)
      const notify = () => toast.error('Todo Deleted', {
 position: "top-right",
 autoClose: 1000,
@@ -67,6 +69,7 @@ transition: Slide,
     }
   return (
     <>
+  
     {/* Header */}
        <AppBar>
           <Toolbar>
@@ -87,18 +90,29 @@ transition: Slide,
         </div>
         <div style={{display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1rem"}}>
               <TextField  variant="outlined"  fullWidth label="New Todo " value={input} onChange={(e)=>setInput(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter") handleAdd();}}></TextField>
-              <Button variant="contained"  color="primary" onClick={handleAdd}>Add</Button>
+              
+              <MotionButton whileHover={{scale:1.05}}   whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 300 }} variant="contained"  color="primary" onClick={handleAdd}>Add</MotionButton>
 
         </div>
          {/* Task List*/}
        
         <List>
+            <AnimatePresence>
             {filteredTodos.map(todo=>(
-                <ListItem key={todo.id} >
+                <motion.li
+  key={todo.id}
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  exit={{ opacity: 0, y: 20 }}
+  transition={{ duration: 0.3 }}
+  style={{ listStyle: "none" }}
+>
+      <ListItem key={todo.id} >
                     <Checkbox checked={todo.completed} onChange={()=>dispatch(toggleCompleted(todo.id))}></Checkbox>
                      {todo.id==editingId?(<>
                       <div style={{display:"flex", gap:10}}>
                         <TextField  variant="outlined"  fullWidth value={editText} onChange={(e)=>seteditText(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter") handleEditAdd();}}></TextField>
+
                         <Button onClick={() => seteditingId(null)}>Cancel</Button>
 
                           <Button variant="contained"  color="warning" onClick={()=>handleEditAdd} >Save</Button>
@@ -120,6 +134,8 @@ transition: Slide,
                    
                    
                 </ListItem>
+</motion.li>
+              
             ))}
                <ToastContainer position="top-right"
 autoClose={1000}
@@ -133,6 +149,7 @@ pauseOnHover
 theme="light"
 transition={Slide}
 />
+</AnimatePresence>
       
   </List>
             
