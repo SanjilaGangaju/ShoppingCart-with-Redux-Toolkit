@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppBar, Button, ButtonGroup, Checkbox, Container, List, ListItem, ListItemText, Paper, TextField, Toolbar, Typography } from '@mui/material'
 import { addTodo, toggleCompleted, deleteTodo} from '../redux/todoSlice'
 import { useSelector, useDispatch } from 'react-redux'
@@ -31,6 +31,9 @@ transition: Slide,
     const filter = useSelector(state=>state.filter)
     const todos = useSelector(state=>state.todos)
 
+     useEffect(() => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+}, [todos]);
     const filteredTodos = todos.filter(todo=>{
         if (filter==='active') return !todo.completed;
         if (filter==='completed') return todo.completed;
@@ -40,7 +43,9 @@ transition: Slide,
      const dispatch = useDispatch();
     const handleAdd=()=>{
         if (input.trim()!==""){
+            
             dispatch(addTodo(input));
+           
             notifyAdd();
            
         
