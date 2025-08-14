@@ -3,7 +3,30 @@ import { AppBar, Button, ButtonGroup, Checkbox, Container, List, ListItem, ListI
 import { addTodo, toggleCompleted, deleteTodo} from '../redux/todoSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../redux/filterSlice'
+import { ToastContainer, toast, Slide } from 'react-toastify';
 const TodoList = () => {
+     const notify = () => toast.error('Todo Deleted', {
+position: "top-right",
+autoClose: 1000,
+hideProgressBar: false,
+closeOnClick: false,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "light",
+transition: Slide,
+});
+   const notifyAdd = () => toast.success('Todo Added', {
+position: "top-right",
+autoClose: 1000,
+hideProgressBar: false,
+closeOnClick: false,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "light",
+transition: Slide,
+});
     const [input, setInput] = useState('')
     const filter = useSelector(state=>state.filter)
     const todos = useSelector(state=>state.todos)
@@ -17,7 +40,9 @@ const TodoList = () => {
      const dispatch = useDispatch();
     const handleAdd=()=>{
         if (input.trim()!==""){
-            dispatch(addTodo(input))
+            dispatch(addTodo(input));
+            notifyAdd();
+           
         
         }
         setInput("");
@@ -55,11 +80,26 @@ const TodoList = () => {
 
                     <ListItemText primary={todo.text} sx={{textDecoration: todo.completed?"line-through": "none"}}>
                     </ListItemText>
-                    <Button onClick={()=>dispatch(deleteTodo(todo.id))}>Delete Todo</Button>
-
+                    <Button onClick={()=>{
+                        dispatch(deleteTodo(todo.id));
+                        notify() }}>Delete Todo</Button>
+            
                 </ListItem>
             ))}
-        </List>
+               <ToastContainer position="top-right"
+autoClose={1000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={false}
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+transition={Slide}
+/>
+      
+  </List>
             
         </Paper>
        

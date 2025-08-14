@@ -5,6 +5,9 @@ import Cart from './components/cart'
 import Product from './components/Product'
 import { BrowserRouter as Router , Routes, Route } from 'react-router-dom'
 import TodoList from './components/TodoList'
+import { ThemeProvider } from '@emotion/react'
+import { theme } from './theme'
+import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
  
   return (
@@ -18,7 +21,10 @@ const App = () => {
       
       
     // </Router>
-    <TodoList></TodoList>
+    <ThemeProvider theme={theme}>
+       <TodoList></TodoList>
+    </ThemeProvider>
+   
   )
 }
 
