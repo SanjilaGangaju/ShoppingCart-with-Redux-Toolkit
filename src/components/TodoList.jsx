@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AppBar, Button, ButtonGroup, Checkbox, Container, List, ListItem, ListItemText, Paper, TextField, Toolbar, Typography } from '@mui/material'
-import { addTodo, toggleCompleted, deleteTodo} from '../redux/todoSlice'
+import { addTodo, toggleCompleted, deleteTodo, editTodo} from '../redux/todoSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../redux/filterSlice'
 import { ToastContainer, toast, Slide } from 'react-toastify';
@@ -30,7 +30,8 @@ transition: Slide,
     const [input, setInput] = useState('')
     const filter = useSelector(state=>state.filter)
     const todos = useSelector(state=>state.todos)
-
+    const [editingId, seteditingId]= useState(null);
+    const [editText, seteditText] = useState("");
      useEffect(() => {
   localStorage.setItem("todos", JSON.stringify(todos));
 }, [todos]);
@@ -51,6 +52,18 @@ transition: Slide,
         
         }
         setInput("");
+    }
+    const handleEdit=(id, text)=>{
+        seteditingId(id);
+        seteditText(text);
+    }
+    const handleEditAdd=()=>{
+        console.log(editingId, editText)
+        dispatch(editTodo({id:editingId, newText:editText}))
+        seteditText(null);
+        seteditingId(null);
+
+
     }
   return (
     <>
@@ -75,6 +88,7 @@ transition: Slide,
         <div style={{display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1rem"}}>
               <TextField  variant="outlined"  fullWidth label="New Todo " value={input} onChange={(e)=>setInput(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter") handleAdd();}}></TextField>
               <Button variant="contained"  color="primary" onClick={handleAdd}>Add</Button>
+
         </div>
          {/* Task List*/}
        
@@ -82,13 +96,29 @@ transition: Slide,
             {filteredTodos.map(todo=>(
                 <ListItem key={todo.id} >
                     <Checkbox checked={todo.completed} onChange={()=>dispatch(toggleCompleted(todo.id))}></Checkbox>
+                     {todo.id==editingId?(<>
+                      <div style={{display:"flex", gap:10}}>
+                        <TextField  variant="outlined"  fullWidth value={editText} onChange={(e)=>seteditText(e.target.value)} onKeyDown={(e)=>{if(e.key==="Enter") handleEditAdd();}}></TextField>
+                        <Button onClick={() => seteditingId(null)}>Cancel</Button>
 
-                    <ListItemText primary={todo.text} sx={{textDecoration: todo.completed?"line-through": "none"}}>
-                    </ListItemText>
-                    <Button onClick={()=>{
+                          <Button variant="contained"  color="warning" onClick={()=>handleEditAdd} >Save</Button>
+ 
+                      </div>
+ 
+                     </>):
+                      (<><ListItemText primary={todo.text} sx={{textDecoration: todo.completed?"line-through": "none"}}></ListItemText>
+                       <div style={{display:"flex", gap:10}}>
+                         <Button variant="contained" color="error" onClick={()=>{
                         dispatch(deleteTodo(todo.id));
                         notify() }}>Delete Todo</Button>
-            
+                          <Button variant="contained"  color="warning" onClick={()=>handleEdit(todo.id, todo.text)} >Edit</Button>
+ 
+                      </div>
+                    </>
+                    )}
+                   
+                   
+                   
                 </ListItem>
             ))}
                <ToastContainer position="top-right"
