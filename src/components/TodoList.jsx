@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { AppBar, Button, ButtonGroup, Checkbox, Container, List, ListItem, ListItemText, Paper, TextField, Toolbar, Typography } from '@mui/material'
+import { AppBar, Button, ButtonGroup, Checkbox, Container, List, ListItem, ListItemText, Paper, TextField, Toolbar, Typography, useTheme } from '@mui/material'
 import { addTodo, toggleCompleted, deleteTodo, editTodo} from '../redux/todoSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../redux/filterSlice'
 import {motion, AnimatePresence} from "framer-motion";
 import { ToastContainer, toast, Slide } from 'react-toastify';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import { useContext } from 'react'
+import { darkModeContext } from '../context/darkModeContext'
+import { theme } from '../theme'
 const TodoList = () => {
+  const {isdarkOn, setisdarkOn} = useContext(darkModeContext)
+  console.log(useContext(darkModeContext))
+  const theme=useTheme();
     const MotionButton = motion(Button)
      const notify = () => toast.error('Todo Deleted', {
 position: "top-right",
@@ -15,7 +23,7 @@ closeOnClick: false,
 pauseOnHover: true,
 draggable: true,
 progress: undefined,
-theme: "light",
+theme: isdarkOn?"dark":"light",
 transition: Slide,
 });
    const notifyAdd = () => toast.success('Todo Added', {
@@ -71,14 +79,19 @@ transition: Slide,
     <>
   
     {/* Header */}
-       <AppBar>
-          <Toolbar>
-            <Typography variant="h6">My To-Do List</Typography>
+       <AppBar  sx={{ backgroundColor: theme.palette.primary.main, color: theme.palette.text.primary }}>
+          <Toolbar style={{display:"flex", justifyContent:"space-between"}}>
+            <Typography variant="h6">TaskNest</Typography>
+           
+            {isdarkOn? <NightsStayIcon onClick={()=>setisdarkOn(false)}/>:<LightModeIcon onClick={()=>setisdarkOn(true)}/>
+}
+
+
           </Toolbar>
        </AppBar>
 
        {/* Main Content */}
-       <Container maxWidth="sm" style={{marginTop:"5rem"}}>
+       <Container maxWidth="sm" style={{paddingTop:"5rem"}} >
         <Paper style={{ padding:"1rem"}}>
          
         <div style={{display:"flex", gap:"1rem", alignItems:"center", justifyContent:"center", marginBottom:"1rem"}}>

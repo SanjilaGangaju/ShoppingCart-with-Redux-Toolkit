@@ -4,8 +4,12 @@ import './index.css'
 import App from './App.jsx'
 import { store } from './redux/store/index.jsx'
 import {Provider} from 'react-redux'
+import DarkModeState from './context/darkModeState.jsx'
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    <App />
+    <DarkModeState>
+      <App />
+    </DarkModeState>
+    
   </Provider>,
 )

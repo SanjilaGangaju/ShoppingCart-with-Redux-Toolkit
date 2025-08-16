@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Counter from './components/counter'
 import Navbar from './components/Navbar'
 import Cart from './components/cart'
 import Product from './components/Product'
 import { BrowserRouter as Router , Routes, Route } from 'react-router-dom'
 import TodoList from './components/TodoList'
-import { ThemeProvider } from '@emotion/react'
-import { theme } from './theme'
+import { ThemeProvider, CssBaseline } from '@mui/material'
+import { theme, lightTheme, darkTheme } from './theme'
 import 'react-toastify/dist/ReactToastify.css';
+import { darkModeContext } from './context/darkModeContext'
 const App = () => {
- 
+  const {isdarkOn} = useContext(darkModeContext)
   return (
     // <Router>
     //   <Navbar></Navbar>
@@ -21,8 +22,11 @@ const App = () => {
       
       
     // </Router>
-    <ThemeProvider theme={theme}>
-       <TodoList></TodoList>
+    <ThemeProvider theme={isdarkOn? darkTheme: lightTheme}>
+      <CssBaseline>
+        <TodoList></TodoList>
+      </CssBaseline>
+       
     </ThemeProvider>
    
   )
