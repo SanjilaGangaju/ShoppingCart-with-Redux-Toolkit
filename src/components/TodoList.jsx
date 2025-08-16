@@ -9,7 +9,6 @@ import NightsStayIcon from '@mui/icons-material/NightsStay';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useContext } from 'react'
 import { darkModeContext } from '../context/darkModeContext'
-import { theme } from '../theme'
 const TodoList = () => {
   const {isdarkOn, setisdarkOn} = useContext(darkModeContext)
   console.log(useContext(darkModeContext))
@@ -79,7 +78,7 @@ transition: Slide,
     <>
   
     {/* Header */}
-       <AppBar  sx={{ backgroundColor: theme.palette.primary.main, color: theme.palette.text.primary }}>
+       <AppBar>
           <Toolbar style={{display:"flex", justifyContent:"space-between"}}>
             <Typography variant="h6">TaskNest</Typography>
            
